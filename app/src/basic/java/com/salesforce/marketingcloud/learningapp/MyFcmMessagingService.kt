@@ -25,6 +25,8 @@
  */
 package com.salesforce.marketingcloud.learningapp
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.salesforce.marketingcloud.messages.push.PushMessageManager
@@ -33,6 +35,9 @@ import com.salesforce.marketingcloud.sfmcsdk.SFMCSdk
 class MyFcmMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
+
+        Log.d(TAG, "EIHWANTEST Message data payload: " + message.getData());
+
         // Only pass messages sent from the Marketing Cloud into the SDK.  Anything else will be ignored if passed into
         // handleMessage.
         if (PushMessageManager.isMarketingCloudPush(message)) {
@@ -44,6 +49,8 @@ class MyFcmMessagingService : FirebaseMessagingService() {
         } else {
             // Not a push from the Marketing Cloud.  Handle manually.
         }
+
+
     }
 
     override fun onNewToken(token: String) {

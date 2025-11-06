@@ -57,6 +57,8 @@ class LearningApplication : BaseLearningApplication(),
             setGeofencingEnabled(true)
             setProximityEnabled(true)
             setUrlHandler(this@LearningApplication)
+
+            Log.d(TAG, "EIHWANTEST deeplinking.LearningApplication run: ");
         }
 
     override fun getNotificationPendingIntent(

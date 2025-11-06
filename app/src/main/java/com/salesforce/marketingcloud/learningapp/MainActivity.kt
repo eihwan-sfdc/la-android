@@ -25,9 +25,11 @@
  */
 package com.salesforce.marketingcloud.learningapp
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentProviderCompat.requireContext
@@ -42,6 +44,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Log.d(TAG, "EIHWANTEST main.MainActivity run: ");
         setContentView(R.layout.activity_main)
 
         setSupportActionBar(findViewById(R.id.toolbar))

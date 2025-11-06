@@ -8,7 +8,7 @@ android {
     compileSdk 36
 
     defaultConfig {
-        applicationId "com.eihwan.learn"
+        applicationId "com.salesforce.marketingcloud.learningapp"
         minSdkVersion 23
         targetSdkVersion 36
         versionCode 1

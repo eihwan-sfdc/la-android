@@ -18,6 +18,8 @@ class LearningApplication : BaseLearningApplication() {
             setGeofencingEnabled(true)
             setProximityEnabled(true)
             setUrlHandler(this@LearningApplication)
+
+            Log.d(TAG, "EIHWANTEST mpp.LearningApplication run: ");
         }
 
 }

@@ -25,6 +25,8 @@
  */
 package com.salesforce.marketingcloud.learningapp
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import com.salesforce.marketingcloud.MarketingCloudConfig
 import com.salesforce.marketingcloud.notifications.NotificationCustomizationOptions
 import com.salesforce.marketingcloud.proximity.ProximityNotificationCustomizationOptions
@@ -46,5 +48,7 @@ class LearningApplication : BaseLearningApplication() {
             setProximityEnabled(true)
             setProximityNotificationOptions(ProximityNotificationCustomizationOptions.create(R.drawable.ic_notification))
             setUrlHandler(this@LearningApplication)
+
+            Log.d(TAG, "EIHWANTEST basic.BaseLearningApplication run: ");
         }
 }
