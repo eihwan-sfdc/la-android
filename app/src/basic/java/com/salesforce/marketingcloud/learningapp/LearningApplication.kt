@@ -25,11 +25,19 @@
  */
 package com.salesforce.marketingcloud.learningapp
 
+import android.app.PendingIntent
 import android.content.ContentValues.TAG
+import android.content.Intent
+import android.net.Uri
+import android.text.TextUtils
 import android.util.Log
 import com.salesforce.marketingcloud.MarketingCloudConfig
 import com.salesforce.marketingcloud.notifications.NotificationCustomizationOptions
+import com.salesforce.marketingcloud.notifications.NotificationManager
+import com.salesforce.marketingcloud.notifications.NotificationMessage
+
 import com.salesforce.marketingcloud.proximity.ProximityNotificationCustomizationOptions
+import java.util.Random
 
 class LearningApplication : BaseLearningApplication() {
 
@@ -40,7 +48,7 @@ class LearningApplication : BaseLearningApplication() {
             setSenderId(BuildConfig.MC_SENDER_ID)
             setMid(BuildConfig.MC_MID)
             setMarketingCloudServerUrl(BuildConfig.MC_SERVER_URL)
-            setNotificationCustomizationOptions(NotificationCustomizationOptions.create(R.drawable.ic_notification))
+//            setNotificationCustomizationOptions(NotificationCustomizationOptions.create(R.drawable.ic_notification))
             setInboxEnabled(true)
             setAnalyticsEnabled(true)
             setPiAnalyticsEnabled(true)
@@ -48,6 +56,22 @@ class LearningApplication : BaseLearningApplication() {
             setProximityEnabled(true)
             setProximityNotificationOptions(ProximityNotificationCustomizationOptions.create(R.drawable.ic_notification))
             setUrlHandler(this@LearningApplication)
+
+            setNotificationCustomizationOptions(
+                // Set small icon via NotificationCustomizationOptions
+                NotificationCustomizationOptions.create(R.drawable.ic_notification,
+                    null,
+                    NotificationManager.NotificationChannelIdProvider { context, notificationMessage ->
+
+                        if (notificationMessage.soundName == "mysound.wav"){
+                            "custom"
+                        } else {
+                            NotificationManager.createDefaultNotificationChannel(context)
+                        }
+                    }
+
+                )
+            )
 
             Log.d(TAG, "EIHWANTEST basic.BaseLearningApplication run: ");
         }

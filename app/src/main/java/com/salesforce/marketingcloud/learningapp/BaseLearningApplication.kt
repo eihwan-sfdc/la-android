@@ -35,9 +35,11 @@ import android.content.Intent
 import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.net.toUri
 import com.salesforce.marketingcloud.MCLogListener
 import com.salesforce.marketingcloud.MarketingCloudConfig
 import com.salesforce.marketingcloud.MarketingCloudSdk
@@ -52,7 +54,9 @@ import com.salesforce.marketingcloud.sfmcsdk.components.logging.LogLevel
 import com.salesforce.marketingcloud.sfmcsdk.components.logging.LogListener
 
 const val LOG_TAG = "~#MCLearningApp"
-const val CUSTOM_CHANNEL_ID = "my_custom_channel_id"
+const val CHANNEL_ID_DEFAULT = "default"
+const val CHANNEL_ID_CUSTOM = "custom"
+
 
 abstract class BaseLearningApplication : Application(), UrlHandler {
 
@@ -60,8 +64,6 @@ abstract class BaseLearningApplication : Application(), UrlHandler {
 
     override fun onCreate() {
         super.onCreate()
-
-        createCustomNotificationChannel()
 
         Log.d(TAG, "EIHWANTEST main.BaseLearningApplication run: ");
 
@@ -105,6 +107,7 @@ abstract class BaseLearningApplication : Application(), UrlHandler {
             }
         }
 
+
         SFMCSdk.requestSdk { sdk ->
             sdk.mp {
                 it.inAppMessageManager.run {
@@ -143,34 +146,34 @@ abstract class BaseLearningApplication : Application(), UrlHandler {
                 }
             }
         }
+        createCustomNotificationChannel(CHANNEL_ID_DEFAULT)
+        createCustomNotificationChannel(CHANNEL_ID_CUSTOM)
     }
 
-    private fun createCustomNotificationChannel() {
+    private fun createCustomNotificationChannel(channelName: String) {
         // Android 8.0 (Oreo) 以上でのみチャンネル作成が必要
+
+        // 音声の属性（通知用であること）を指定
+        val audioAttributes = AudioAttributes.Builder()
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+            .build()
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             // 1. チャンネルID、名前、重要度 を設定
-            val channelId = CUSTOM_CHANNEL_ID // ID
-            val channelName = "CustomSound" // ユーザーが設定画面で見る名前
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-
-            val channel = NotificationChannel(channelId, channelName, importance).apply {
+            val channel = NotificationChannel(channelName, channelName, NotificationManager.IMPORTANCE_DEFAULT).apply {
                 // オプション: 説明文
-                description = "カスタムサウンドが鳴る通知です"
+                description = channelName
                 // ※ 他にもライトの色(lightColor)やバイブレーション(vibrationPattern)も設定可能
             }
 
-            // 2. カスタムサウンドの設定
-            // 音声ファイルのURIを取得
-            val soundUri: Uri = Uri.parse(
-                "android.resource://" + packageName + "/" + R.raw.mysound
-            )
-
-            // 音声の属性（通知用であること）を指定
-            val audioAttributes = AudioAttributes.Builder()
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                .build()
+            var soundUri: Uri? = null;
+            if (channelName == CHANNEL_ID_DEFAULT) {
+                soundUri = Settings.System.DEFAULT_NOTIFICATION_URI
+            } else  {
+                soundUri = "android.resource://${packageName}/${R.raw.mysound}".toUri()
+            }
 
             // チャンネルにサウンドと属性をセット
             channel.setSound(soundUri, audioAttributes)

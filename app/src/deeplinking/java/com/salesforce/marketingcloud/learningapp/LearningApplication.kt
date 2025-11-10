@@ -58,7 +58,7 @@ class LearningApplication : BaseLearningApplication(),
             setProximityEnabled(true)
             setUrlHandler(this@LearningApplication)
 
-            Log.d(TAG, "EIHWANTEST deeplinking.LearningApplication run: ");
+            Log.d(TAG, "deeplinking.LearningApplication run: ");
         }
 
     override fun getNotificationPendingIntent(
